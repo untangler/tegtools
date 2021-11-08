@@ -1,24 +1,31 @@
 class Teg {
   # has %.p = (); # parms
   has @.q;
-  method write(%parms) {
+  method write() {
     my @result;
     for @!q -> $t {
       given $t {
         when Teg {
-          @result.push: $t.write(%parms);
+          @result.push: $t.write();
         }
         when Str {
-          @result.push: $t
+          @result.push: $t;
+        }
+        when List {
+          for @$t -> $e { @result.push: $e.write() }
+        }
+        when Callable {
+          my $zzz = $t.().write;
+          if $zzz {
+            note " >>> callable: ", $zzz.raku;
+            @result.push: $zzz;
+          }
         }
         default {
-          die "I do not know how to handle teg part fo type $t"
+          die "I do not know how to handle teg part of type {$t.raku}";
         }
       }
     }
+    return |@result;
   }
 }
-
-constant Teg $comma is export .= new: q => (',');
-constant Teg $longbr is export .= new: q => (" \t\t");
-constant Teg $eou is export .= new: q => ('<eou>');
