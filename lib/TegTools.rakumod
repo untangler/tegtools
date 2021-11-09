@@ -13,11 +13,16 @@ sub preprocessFrags(@frags, %parms) {
         when PNGEN { @out.push: "uw" }
         default { @out.push: $_ }
       }
+    } elsif %parms<number>.defined and %parms<number> eq 'pl' {
+      for @frags {
+        when PN|PNDAT|PNACC|PNGEN { @out.push: "jullie" }
+        default { @out.push: $_ }
+      }
     } else {
       for @frags {
         when PN { @out.push: "jij" }
-        when PNDAT { @out.push: "jou" }
-        when PNACC|PNGEN { @out.push: "je" }
+        when PNDAT|PNACC { @out.push: "jou" }
+        when PNGEN { @out.push: "jouw" }
         default { @out.push: $_ }
       }
     }
