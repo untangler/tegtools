@@ -7,7 +7,7 @@ sub preprocessFrags(@frags) {
   # note @frags.raku;
   my Frag @out = ();
   for @frags {
-    when PN { @out.push: "you" }
+    when PN|PNDAT|PNACC { @out.push: "you" }
     when PNGEN { @out.push: "your" }
     default { @out.push: $_ }
   }
@@ -15,15 +15,14 @@ sub preprocessFrags(@frags) {
 }
 
 sub processFrags(@infrags) {
-  my $prev;
+  
   my Str @out = ();
   my @frags = @infrags;
   @frags.push: EMPTY; # so that the last element is considered
-  for @frags -> $frag {
-    unless $prev {
-      $prev = $frag;
-      next;
-    } # else
+  @frags.unshift: EMPTY; # so that the last element is considered
+  my $prev = @frags[0];
+  for 1..^ @frags.elems -> $i {
+    my $frag = @frags[$i];
     if $prev ~~ Str {
       if $frag ~~ Str {
         $prev ~= ' ';
@@ -46,8 +45,8 @@ sub processFrags(@infrags) {
             @out.push: ". ";
           } elsif $frag ~~ EMPTY|BR|LONGBR {
             @out.push: ".";
-          } else {
-            note "OEOU ignored if followed by ", $frag.raku;
+          # } else {
+          #   note "OEOU ignored if followed by ", $frag.raku;
           }
         }        
         when EOU {
@@ -59,7 +58,7 @@ sub processFrags(@infrags) {
         }
         when CAP {
           if $frag ~~ Str {
-            $frag .= tc;
+            @frags[$i] .= tc;
           }
         }
       }
