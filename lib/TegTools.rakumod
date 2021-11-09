@@ -3,14 +3,33 @@ unit module TegTools:ver<0.0.1>:auth<Theo van den Heuvel>;
 use TegTools::Teg;
 use TegTools::Directive;
 
-sub preprocessFrags(@frags) {
+sub preprocessFrags(@frags, %parms) {
   # note @frags.raku;
   my Frag @out = ();
-  for @frags {
-    when PN|PNDAT|PNACC { @out.push: "you" }
-    when PNGEN { @out.push: "your" }
-    default { @out.push: $_ }
+  if %parms<lang> eq 'nl' {
+    if %parms<formal> {
+      for @frags {
+        when PN|PNDAT|PNACC { @out.push: "u" }
+        when PNGEN { @out.push: "uw" }
+        default { @out.push: $_ }
+      }
+    } else {
+      for @frags {
+        when PN { @out.push: "jij" }
+        when PNDAT { @out.push: "jou" }
+        when PNACC|PNGEN { @out.push: "je" }
+        default { @out.push: $_ }
+      }
+    }
+  } else { # lang = en
+    for @frags {
+      when PN|PNDAT|PNACC { @out.push: "you" }
+      when PNGEN { @out.push: "your" }
+      default { @out.push: $_ }
+    }
+
   }
+
   return @out;
 }
 
@@ -24,7 +43,7 @@ sub processFrags(@infrags) {
   for 1..^ @frags.elems -> $i {
     my $frag = @frags[$i];
     if $prev ~~ Str {
-      if $frag ~~ Str {
+      if $frag ~~ Str|CAP|PN|PNACC|PNGEN|PNDAT  {
         $prev ~= ' ';
       }
       @out.push: $prev;
@@ -58,7 +77,7 @@ sub processFrags(@infrags) {
         }
         when CAP {
           if $frag ~~ Str {
-            @frags[$i] .= tc;
+            $frag .= tc;
           }
         }
       }
@@ -71,7 +90,7 @@ sub process(TegTools::Teg $teg, %parms) is export {
   # my @interm = $teg.write(%parms);
   my Frag @interm = $teg.write();
   # note 'written ', @interm.raku;
-  @interm = preprocessFrags(@interm);
+  @interm = preprocessFrags(@interm, %parms);
   # note 'preprocessed ', @interm.raku;
   return processFrags(@interm).join;
 }

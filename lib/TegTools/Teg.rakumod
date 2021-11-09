@@ -10,7 +10,7 @@ class TegTools::Teg {
       for @f -> $t {
         given $t {
           when TegTools::Teg {
-            @result.append: |$t.write();
+            @result.append: |$t.write;
           }
           when Frag {
             @result.push: $t;
@@ -21,7 +21,7 @@ class TegTools::Teg {
           when Callable {
             my $calc = $t.();
             if $calc ~~ TegTools::Teg { 
-              @result.append: $calc.write 
+              @result.append: $calc.write; 
             } else { 
               @result.append: recur($calc);
             }

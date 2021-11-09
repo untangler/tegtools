@@ -35,7 +35,8 @@ my %form = (
   company => 'Kbadata',
   intro => 'Op uw website zien we dat u zich o.a. bezighoudt met dataverzameling en -verwerking.',
   :long,
-  :formal
+  # formal => False,
+  :lang<nl>
 );
 
 
@@ -92,11 +93,7 @@ $addr .= new: q => (
     EOADDR
 
 );
-$letter .= new: q => ($greet, $intro, $body, $question, $final, $addr);
+$letter .= new: q => ($greet, $intro, $body, $question, LONGBR, $final, $addr);
 
-%parms = (
-  formal => %form<formal>,
-  long => %form<long>,
-  lang => 'nl'
-);
-spurt %form<company>.lc ~ "-$dt", process($letter, %parms);
+
+spurt %form<company>.lc ~ "-$dt", process($letter, %form);
