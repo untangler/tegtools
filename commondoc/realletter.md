@@ -29,3 +29,9 @@ Type check failed in binding to parameter '@f'; expected Positional but got Str 
 Why not same message when formal?
 
 Does not happen in e.g. t/lang.t
+
+## 20211110
+
+yesterday's bug still unsolve.
+
+focus on createing untangleTeg.rakumod

@@ -16,20 +16,7 @@ based on letterEngine (also by me)
 
 use lib 'lib';
 
-use TegTools;
-use TegTools::Teg;
-use TegTools::Directive;
-
-my %parms;
-
-my TegTools::Teg ($letter, $greet, $intro, $body,
-  $question, $final, $addr, $formdate);
-
-# say $tmpl;
-# my $stache = Template::Mustache.new: $tmplNL;
-
-my $formatter = sub ($self) { sprintf "%04d%02d%02d", .year, .month, .day given $self; };
-my $dt = Date.new(now, :$formatter);
+use UntangleTeg;
 
 my %form = (
   company => 'Kbadata',
@@ -38,9 +25,10 @@ my %form = (
   # formal => False,
   :lang<nl>
 );
-
+produce(%form);
 
 my $phrases = q:to/ENDPHRASES/;
+We hebben elkaar zojuist telefonisch gesproken, vandaar deze mail.
 complexe spreadsheetverzamelingen
 We zouden graag willen weten of uw organisatie weleens tegen de grenzen van de bruikbaarheid van spreadsheets aanloopt en of onze organisatie daarbij van dienst Zou kunnen zijn.
 Op uw website zien we dat u zich o.a. bezighoudt met dataverzameling en -verwerking.
