@@ -5,17 +5,14 @@ use lib 'lib';
 
 plan 2;
 
-
 use-ok 'TegTools';
 use TegTools;
 use TegTools::Teg;
 use TegTools::Directive;
 
-
-
 my %parms;
 
-my TegTools::Teg $sentence .= new: q => ('how are', PN, 'and', PNGEN, 'organization', 'doing?', BR);
+my TegTools::Teg $sentence .= new: ('how are', PN, 'and', PNGEN, 'organization', 'doing?', BR);
 
 %parms = (:formal, :lang<en>);
 my $out = process($sentence, %parms);

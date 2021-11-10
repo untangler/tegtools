@@ -13,12 +13,12 @@ use TegTools::Directive;
 my %parms;
 
 my TegTools::Teg ($message, $head, $tail, $recipient, $stuff);
-$stuff .= new: q => ("piano");
-$recipient .= new: q => ("Harry");
-$head .= new: q => ('hi', $recipient, XW, ',', LONGBR, 'the', $stuff, 'has arrived', OEOU);
-$tail .= new: q => (XW, ', and we hope you like it', EOU);
-# $message .= new: q => ($head, $tail);
-$message .= new: q => ($head, -> { %parms<long> ?? $tail !! (EMPTY,) }, BR );
+$stuff .= new: ("piano");
+$recipient .= new: ("Harry");
+$head .= new: ('hi', $recipient, XW, ',', LONGBR, 'the', $stuff, 'has arrived', OEOU);
+$tail .= new: (XW, ', and we hope you like it', EOU);
+# $message .= new: ($head, $tail);
+$message .= new: ($head, -> { %parms<long> ?? $tail !! (EMPTY,) }, BR );
 
 # note $message.raku;
 isa-ok $message, 'TegTools::Teg', ' is a  Teg';
@@ -26,10 +26,10 @@ isa-ok $message, 'TegTools::Teg', ' is a  Teg';
 my $shortResult = "hi Harry,\n\nthe piano has arrived.\n";
 my $longResult = "hi Harry,\n\nthe piano has arrived, and we hope you like it.\n";
 
-%parms = ();
+%parms = (:lang<en>);
 is process($message, %parms), $shortResult, 'short result';
 
-%parms = (:long);
+%parms = (:long, :lang<en>);
 is process($message, %parms), $longResult, 'long result';
 
 # is capturing(->$fh { $db.publish($fh, True, (<aap>,)) }),

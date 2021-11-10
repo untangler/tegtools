@@ -16,7 +16,7 @@ use TegTools::Directive;
 my %parms;
 my $out;
 
-my TegTools::Teg $sentence .= new: q => (
+my TegTools::Teg $sentence .= new: (
   -> {
     given %parms<lang> {
       when 'en' { ('how are', PN, 'and', PNGEN, 'organization', 'doing?', BR); }

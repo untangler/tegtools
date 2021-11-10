@@ -3,6 +3,11 @@ use TegTools::Directive;
 class TegTools::Teg {
   # has %.p = (); # parms
   has @.q;
+
+  # constructor for brevity
+  method new(*@t) {
+    self.bless(q => @t);
+  }
   method write(-->Array[Frag]) {
     
     sub recur(@f --> Array[Frag]) {
@@ -23,7 +28,7 @@ class TegTools::Teg {
             if $calc ~~ TegTools::Teg { 
               @result.append: $calc.write; 
             } else { 
-              @result.append: recur($calc);
+              @result.append: recur([$calc]);
             }
           }
           default {

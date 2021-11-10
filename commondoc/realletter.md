@@ -34,4 +34,10 @@ Does not happen in e.g. t/lang.t
 
 yesterday's bug still unsolve.
 
-focus on createing untangleTeg.rakumod
+focus on creating untangleTeg.rakumod
+
+real company name and compressed form (lc, without spaces and hyphens). done
+
+constructor for Tegs.
+sigilless Teg names.
+UntangleTeg per language?

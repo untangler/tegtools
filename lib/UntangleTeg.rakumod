@@ -5,24 +5,20 @@ use TegTools::Teg;
 use TegTools::Directive;
 
 sub produce(%parms) is export {
-  my TegTools::Teg ($letter, $greet, $intro, $body,
-    $question, $final, $addr, $formdate);
-
-  # say $tmpl;
-  # my $stache = Template::Mustache.new: $tmplNL;
-
+  # note %parms;
+  # we need a date string for the file name
   my $formatter = sub ($self) { sprintf "%04d%02d%02d", .year, .month, .day given $self; };
   my $dt = Date.new(now, :$formatter);
 
-  my %form = (
-    company => 'Kbadata',
-    intro => 'Op uw website zien we dat u zich o.a. bezighoudt met dataverzameling en -verwerking.',
-    :long,
-    # formal => False,
-    :lang<nl>
-  );
+  # declare elements of type Teg
+  my TegTools::Teg ($letter, $greet, $intro, $body,
+    $question, $final, $addr, $formdate);
 
+  # check consistency of parms
+  # called and intro are mutually exclusive
+  die "called and intro are mutually exclusive" if %parms<called>:exists and %parms<intro>:exists;
 
+  # unused
   my $phrases = q:to/ENDPHRASES/;
   We hebben elkaar zojuist telefonisch gesproken, vandaar deze mail.
   complexe spreadsheetverzamelingen
@@ -30,12 +26,14 @@ sub produce(%parms) is export {
   Op uw website zien we dat u zich o.a. bezighoudt met dataverzameling en -verwerking.
   ENDPHRASES
 
-  $greet .= new: q => ( %form<greet> // 'geachte lezer(es)', XW, ',', LONGBR);
-  $intro .= new: q => ( %form<intro> // EMPTY );
-  $question .= new: q => ( %form<question> // EMPTY );
-  $body .= new: q => (
+  $greet .= new: ( %parms<greet> // 'geachte lezer(es)', XW, ',', LONGBR);
+  $intro .= new: ( %parms<intro> // -> { %parms<called> 
+    ?? 'We hebben elkaar zojuist telefonisch gesproken, vandaar deze mail'
+    !! EMPTY });
+  $question .= new: ( %parms<question> // EMPTY );
+  $body .= new: (
     -> {
-      if (%form<long>) {
+      if (%parms<long>) {
         ('Wij zetten op dit moment een consultancydienst op die organisaties helpt',
         'zich te bevrijden van diepe Excelvalkuilen.  Daarbij moet',  PN, 
         'denken aan organisaties die bijvoorbeeld Excel noodgedwongen',
@@ -55,7 +53,7 @@ sub produce(%parms) is export {
 
         'We hebben al stappen gezet om vanuit een spreadheet-verzameling een applicatie te kunnen genereren die ongeveer hetzelfde doet, maar met een database werkt.',
         'Hier worden dus rekenmodellen en grafieken uit Excel vertaald naar rekenmodellen en grafieken in een (web)applicatie.',
-        'Het resultaat kun', ->  {%form<formal> ?? ( XW, 't u') !! 'je'}, 
+        'Het resultaat kun', ->  {%parms<formal> ?? ( XW, 't u') !! 'je'}, 
         'dan bijvoorbeeld aan', PNGEN, 'klanten ter beschikking stellen.',
         'Onze consultancy betreft dan bijvoorbeeld ook mogelijke rijkere visualisaties van informatie.')
       } else {
@@ -66,8 +64,8 @@ sub produce(%parms) is export {
       }
     }
   );
-  $final .= new: q => ( %form<formal> ?? "met vriendelijk groet," !!  "alvast bedankt," );
-  $addr .= new: q => (
+  $final .= new: ( %parms<formal> ?? "met vriendelijk groet," !!  "alvast bedankt," );
+  $addr .= new: (
     q:to/EOADDR/;
 
 
@@ -77,9 +75,9 @@ sub produce(%parms) is export {
       EOADDR
 
   );
-  $letter .= new: q => ($greet, $intro, $body, $question, LONGBR, $final, $addr);
+  $letter .= new: ($greet, $intro, $body, $question, LONGBR, $final, $addr);
 
 
-  spurt %form<company>.lc ~ "-$dt", process($letter, %form);
+  spurt %parms<company>.lc.trans('a'..'z' => '', :complement) ~ "-$dt", process($letter, %parms);
 }
 
