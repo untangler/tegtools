@@ -38,7 +38,31 @@ sub preprocessFrags(@frags, %parms) {
   return @out;
 }
 
-sub processFrags(@infrags) {
+sub tense (Str $stem, %parms) {
+  if %parms<lang> eq 'en' {
+    if %parms<number>.defined and %parms<number> eq 'pl' {
+      return $stem; # no-op
+    } else { # singular
+      my @ch = $stem.comb;
+      given @ch[*-1] {
+        when /^<[os]>$/ { return $stem ~ 'es'}
+        default { return $stem ~'s' } 
+      }
+    }
+  } elsif %parms<lang> eq 'nl' {
+    if %parms<number>.defined and %parms<number> eq 'pl' {
+      return $stem; # no-op
+    } else { # singular
+      my @ch = $stem.comb;
+      given @ch[*-1] {
+        when /^<[os]>$/ { return $stem ~ 'es'}
+        default { return $stem ~'s' } 
+      }
+    }    
+  }
+}
+
+sub processFrags(@infrags, %parms) {
   
   my Str @out = ();
   my @frags = @infrags;
@@ -50,6 +74,8 @@ sub processFrags(@infrags) {
     if $prev ~~ Str {
       if $frag ~~ Str|CAP|PN|PNACC|PNGEN|PNDAT  {
         $prev ~= ' ';
+      } elsif $frag  ~~ V3 {
+        $prev = tense($frag, %parms);
       }
       @out.push: $prev;
     } else {

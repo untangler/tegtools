@@ -17,6 +17,9 @@ sub produce(%parms) is export {
   # check consistency of parms
   # called and intro are mutually exclusive
   die "called and intro are mutually exclusive" if %parms<called>:exists and %parms<intro>:exists;
+  die "long and short are mutually exclusive" if %parms<long>:exists and %parms<short>:exists;
+  die "visit and long are mutually exclusive" if %parms<visit>:exists and %parms<long>:exists;
+  die "visit and short are mutually exclusive" if %parms<visit>:exists and %parms<short>:exists;
 
   # unused
   my $phrases = q:to/ENDPHRASES/;
@@ -28,12 +31,20 @@ sub produce(%parms) is export {
 
   $greet .= new: ( %parms<greet> // 'geachte lezer(es)', XW, ',', LONGBR);
   $intro .= new: ( %parms<intro> // -> { %parms<called> 
-    ?? 'We hebben elkaar zojuist telefonisch gesproken, vandaar deze mail'
+    ?? ('We hebben elkaar zojuist telefonisch gesproken, vandaar deze mail.', BR, BR)
     !! EMPTY });
   $question .= new: ( %parms<question> // EMPTY );
   $body .= new: (
     -> {
-      if (%parms<long>) {
+      if (%parms<visit>) {
+        ('Op uw website zien we dat u zich o.a. bezighoudt met dataverzameling en -verwerking.',
+        BR, BR,
+        'Wij bieden consultancy aan op het gebied van dataverzameling en -verwerking.',
+        'We hebben ervaring op het gebied van complexe spreadsheet- en database-configuaties.',
+        'Sta', -> { %parms<formal> ?? ( XW, 'at u') !! 'je' }, 'open voor een vrijblijvend gesprek om te zien of wij uw dataverwerking kunnen stroomlijnen en robuuster maken?',
+        'Dat kan desgewenst remote.',
+        PN, 'vindt meer informatie op onze splinternieuwe website: untanglelogic.nl.')
+      } elsif (%parms<long>) {
         ('Wij zetten op dit moment een consultancydienst op die organisaties helpt',
         'zich te bevrijden van diepe Excelvalkuilen.  Daarbij moet',  PN, 
         'denken aan organisaties die bijvoorbeeld Excel noodgedwongen',
@@ -55,8 +66,8 @@ sub produce(%parms) is export {
         'Hier worden dus rekenmodellen en grafieken uit Excel vertaald naar rekenmodellen en grafieken in een (web)applicatie.',
         'Het resultaat kun', ->  {%parms<formal> ?? ( XW, 't u') !! 'je'}, 
         'dan bijvoorbeeld aan', PNGEN, 'klanten ter beschikking stellen.',
-        'Onze consultancy betreft dan bijvoorbeeld ook mogelijke rijkere visualisaties van informatie.')
-      } else {
+        'Onze consultancy betreft dan bijvoorbeeld ook mogelijk rijkere visualisaties van informatie.')
+      } else { # short
         ('Wij zijn op zoek naar mogelijke toepassingen van onze technologie om (grote) spreadsheetverzamelingen',
         'doormiddel van een door onszelf ontwikkelde semantische scanner inzichtelijker te maken.',
         'We zouden graag met iemand binnen', PNGEN, 'organisatie spreken',

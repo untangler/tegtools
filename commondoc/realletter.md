@@ -39,5 +39,8 @@ focus on creating untangleTeg.rakumod
 real company name and compressed form (lc, without spaces and hyphens). done
 
 constructor for Tegs.
-sigilless Teg names.
-UntangleTeg per language?
+sigilless Teg names? No.
+UntangleTeg per language? Hmm.no.
+
+## 20211111
+

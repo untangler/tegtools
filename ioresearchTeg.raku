@@ -8,9 +8,10 @@ use UntangleTeg;
 
 my %form = (
   company => 'I&O Research',
-  intro => 'Op uw website zien we dat u zich o.a. bezighoudt met dataverzameling en -verwerking.',
-  :long,
+  :called,
+  :visit,
   # formal => False,
+  :formal,
   :lang<nl>
 );
 produce(%form);
