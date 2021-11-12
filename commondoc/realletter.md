@@ -42,5 +42,11 @@ constructor for Tegs.
 sigilless Teg names? No.
 UntangleTeg per language? Hmm.no.
 
-## 20211111
+## 20211112
 
+better vehicle for checking consistency of parameters.
+default parmater values (eg informal)
+handling tense (only for dutch formal/informal sg/pl)
+
+input 'hoe ga', V, PN, '?'
+  ==> preproc ==> 'hoe ga', V, 'jij'

@@ -38,27 +38,35 @@ sub preprocessFrags(@frags, %parms) {
   return @out;
 }
 
-sub tense (Str $stem, %parms) {
+sub tense (Str $stem, %parms, $consdouble = False, $soften = False, $vowdouble = False) {
+  my @ch = $stem.comb;
   if %parms<lang> eq 'en' {
-    if %parms<number>.defined and %parms<number> eq 'pl' {
-      return $stem; # no-op
-    } else { # singular
-      my @ch = $stem.comb;
-      given @ch[*-1] {
-        when /^<[os]>$/ { return $stem ~ 'es'}
-        default { return $stem ~'s' } 
-      }
-    }
+    return $stem; # no-op
   } elsif %parms<lang> eq 'nl' {
-    if %parms<number>.defined and %parms<number> eq 'pl' {
-      return $stem; # no-op
-    } else { # singular
-      my @ch = $stem.comb;
+    if !%parms<formal> {
+      if %parms<number>.defined and %parms<number> eq 'pl' { # jullie
+        given @ch[*-1] {
+          when 'a' { return $stem ~ 'an'}
+          when 'e' { return $stem ~ 'n'}
+          when 'f' and $soften and $vowdouble { return $stem.substr(0, *-2) ~ 'ven'}
+          when 's' and $soften and $vowdouble { return $stem.substr(0, *-2) ~ 'zen'}
+          when 'f' and $soften and !$vowdouble { return $stem.substr(0, *-1) ~ 'ven'}
+          when 's' and $soften and !$vowdouble { return $stem.substr(0, *-1) ~ 'zen'}
+          when /<[bdfgklmnprstv]>/ and $consdouble  { return $stem.substr(0, *-1) ~(@ch[*-1] x 2) ~ 'en'}
+          when /<[bdfgklmnprstv]>/ and $vowdouble  { return $stem.substr(0, *-2) ~ @ch[*-1] ~ 'en'}
+          default { return $stem ~ 'en' }
+        }
+      } else { # je
+        return $stem;
+      }    
+    } else { # formal => 3rd person
       given @ch[*-1] {
-        when /^<[os]>$/ { return $stem ~ 'es'}
-        default { return $stem ~'s' } 
+        when 'a' { return $stem ~ 'at'}
+        when 'e' { return $stem ~ 't'}
+        when 't' { return $stem }
+        default { return $stem ~ 't' }
       }
-    }    
+    }  
   }
 }
 
@@ -74,8 +82,16 @@ sub processFrags(@infrags, %parms) {
     if $prev ~~ Str {
       if $frag ~~ Str|CAP|PN|PNACC|PNGEN|PNDAT  {
         $prev ~= ' ';
-      } elsif $frag  ~~ V3 {
-        $prev = tense($frag, %parms);
+      } elsif $frag ~~ V {
+        $prev = tense($prev, %parms) ~ ' ';
+      } elsif $frag ~~ VC2 {
+        $prev = tense($prev, %parms, True) ~ ' ';
+      } elsif $frag ~~ VZ {
+        $prev = tense($prev, %parms, False, True) ~ ' ';
+      } elsif $frag ~~ VV {
+        $prev = tense($prev, %parms, False, False, True) ~ ' ';
+      } elsif $frag ~~ VVZ {
+        $prev = tense($prev, %parms, False, True, True) ~ ' ';
       }
       @out.push: $prev;
     } else {
@@ -123,5 +139,5 @@ sub process(TegTools::Teg $teg, %parms) is export {
   # note 'written ', @interm.raku;
   @interm = preprocessFrags(@interm, %parms);
   # note 'preprocessed ', @interm.raku;
-  return processFrags(@interm).join;
+  return processFrags(@interm, %parms).join;
 }

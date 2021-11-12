@@ -29,19 +29,29 @@ sub produce(%parms) is export {
   Op uw website zien we dat u zich o.a. bezighoudt met dataverzameling en -verwerking.
   ENDPHRASES
 
-  $greet .= new: ( %parms<greet> // 'geachte lezer(es)', XW, ',', LONGBR);
+  $greet .= new: ( %parms<greet> // 'geachte', -> { %parms<name> // 'lezer(es)' } , XW, ',', LONGBR);
   $intro .= new: ( %parms<intro> // -> { %parms<called> 
     ?? ('We hebben elkaar zojuist telefonisch gesproken, vandaar deze mail.', BR, BR)
     !! EMPTY });
   $question .= new: ( %parms<question> // EMPTY );
   $body .= new: (
     -> {
-      if (%parms<visit>) {
+      if (%parms<yourdata>) {
+        ('Wij bieden consultancy aan op het gebied van dataverzameling en -verwerking.',
+        BR,
+        %parms<company>, 'heeft veel data. We begrijpen dat', PN, 'daar een sleutelfiguur bent op dat gebied.', BR, BR,
+
+        'Sta', -> { %parms<formal> ?? ( XW, 'at u') !! 'je' }, 'open voor een vrijblijvend gesprek',
+        'om te zien of wij uw dataverwerking kunnen stroomlijnen en robuuster maken?', BR,
+        'Dat kan desgewenst remote, hoewel een bezoek aan', %parms<location>,  'onze voorkeur zou hebben.', BR, BR,
+        PN, 'vindt meer informatie op onze splinternieuwe website: untanglelogic.nl.')
+      } elsif (%parms<long>) {
         ('Op uw website zien we dat u zich o.a. bezighoudt met dataverzameling en -verwerking.',
         BR, BR,
         'Wij bieden consultancy aan op het gebied van dataverzameling en -verwerking.',
         'We hebben ervaring op het gebied van complexe spreadsheet- en database-configuaties.',
-        'Sta', -> { %parms<formal> ?? ( XW, 'at u') !! 'je' }, 'open voor een vrijblijvend gesprek om te zien of wij uw dataverwerking kunnen stroomlijnen en robuuster maken?',
+        'Sta', -> { %parms<formal> ?? ( XW, 'at u') !! 'je' }, 'open voor een vrijblijvend gesprek',
+        'om te zien of wij uw dataverwerking kunnen stroomlijnen en robuuster maken?',
         'Dat kan desgewenst remote.',
         PN, 'vindt meer informatie op onze splinternieuwe website: untanglelogic.nl.')
       } elsif (%parms<long>) {
@@ -64,7 +74,7 @@ sub produce(%parms) is export {
 
         'We hebben al stappen gezet om vanuit een spreadheet-verzameling een applicatie te kunnen genereren die ongeveer hetzelfde doet, maar met een database werkt.',
         'Hier worden dus rekenmodellen en grafieken uit Excel vertaald naar rekenmodellen en grafieken in een (web)applicatie.',
-        'Het resultaat kun', ->  {%parms<formal> ?? ( XW, 't u') !! 'je'}, 
+        'Het resultaat kun', -> {%parms<formal> ?? ( XW, 't u') !! 'je'}, 
         'dan bijvoorbeeld aan', PNGEN, 'klanten ter beschikking stellen.',
         'Onze consultancy betreft dan bijvoorbeeld ook mogelijk rijkere visualisaties van informatie.')
       } else { # short
