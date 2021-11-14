@@ -80,3 +80,14 @@ so we can see e.g. the english materials in isolation or the informal ones.
 
 interactive tool to create a letterTeg.raku file
 Once compile template into rakumod.
+
+set up grammar for teg 
+also for vs code
+actions to produce rakumod
+set of smell example tegs
+
+
+in grammar:
+
+- add comments
+- add control structures
