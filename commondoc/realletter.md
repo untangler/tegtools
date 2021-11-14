@@ -45,8 +45,38 @@ UntangleTeg per language? Hmm.no.
 ## 20211112
 
 better vehicle for checking consistency of parameters.
-default parmater values (eg informal)
-handling tense (only for dutch formal/informal sg/pl)
+default parameter values (eg informal)
+handling tense (only for dutch formal/informal sg/pl). done.
 
-input 'hoe ga', V, PN, '?'
-  ==> preproc ==> 'hoe ga', V, 'jij'
+## 20211113
+
+TODO
+
+- better syntax for functions in Tegs
+- parameterized directives (PN, V)
+- check consistency
+- expert tool to create letter form
+- teg compiler 
+
+## 20211114
+
+teg syntax:
+
+- # comment
+- named block: ... = {  ... }
+- alt:  |
+- terms: ,
+- grouping: { ... }
+- parm with name of current block: _
+- defined(bool): ? ... | ...
+- apply(parm or named block): *
+- apply if defined(bool): *?
+- case: ...@ |{ @..: ...} |{ @..: ... | ... } | {@: ...} } 
+- directive: XYZ or XYZ[.., .., ..]
+
+
+ideally in a visualisation you can chose to distrbute features,
+so we can see e.g. the english materials in isolation or the informal ones.
+
+interactive tool to create a letterTeg.raku file
+Once compile template into rakumod.

@@ -1,0 +1,71 @@
+letter = {
+  greet = { _*?
+    | 'geachte', { name*? | 'lezer(es)' }
+  },
+  intro = { _*? ;
+    called? { 'We hebben elkaar zojuist telefonisch gesproken, vandaar deze mail.', BR, BR }
+  },
+  body = {
+    bodytype@ 
+    | { @yourdata: {
+        'Wij bieden consultancy aan op het gebied van dataverzameling en -verwerking.',
+        BR,
+        company, 'heeft veel data. We begrijpen dat', PN, 'daar een sleutelfiguur bent op dat gebied.', BR, BR,
+
+        'Sta', VP, 'open voor een vrijblijvend gesprek',
+        'om te zien of wij uw dataverwerking kunnen stroomlijnen en robuuster maken?', BR,
+        'Dat kan desgewenst remote, hoewel een bezoek aan', location*,  'onze voorkeur zou hebben.', BR, BR,
+        PN, 'vindt meer informatie op onze splinternieuwe website: untanglelogic.nl.')
+    }}
+    | { @visit: {
+        'Op uw website zien we dat u zich o.a. bezighoudt met dataverzameling en -verwerking.',
+        BR, BR,
+        'Wij bieden consultancy aan op het gebied van dataverzameling en -verwerking.',
+        'We hebben ervaring op het gebied van complexe spreadsheet- en database-configuaties.',
+        'Sta', VP, 'open voor een vrijblijvend gesprek',
+        'om te zien of wij uw dataverwerking kunnen stroomlijnen en robuuster maken?',
+        'Dat kan desgewenst remote.',
+        PN, 'vindt meer informatie op onze splinternieuwe website: untanglelogic.nl.')
+    }}
+    | { @long: {
+        'Wij zetten op dit moment een consultancydienst op die organisaties helpt',
+        'zich te bevrijden van diepe Excelvalkuilen.  Daarbij moet',  PN, 
+        'denken aan organisaties die bijvoorbeeld Excel noodgedwongen',
+        'als database gebruiken (met alle risicos van dien)',
+        'of waarbij de verzamelingen bestanden groot en onoverzichtelijk worden.',
+        CAP, PN, 'kunt ook denken aan organisaties die worstelen met pogingen',
+        'om anderen toegang te geven tot de informatie uit de sheets',
+        'zonder ze te hoeven confronteren met woeste Excelstructuren.', BR, BR,
+
+        'We bieden een ander soort ondersteuning dan de meeste Excelexperts.',
+        'Wij bieden een traject aan waarbij we het materiaal aan een geautomatiseerde analyze en scan onderwerpen.',
+        'De resultaten kunnen we dan samen met', PN[d], 'bestuderen met een speciaal daarvoor ontwikkelde tool set.',
+        'Zo kunnen we zwakheden vinden, waarvan de auteur mogelijk geen weet had.', BR, BR,
+
+        'Onze eerste klant had miljoenen cellen met waardes en formules en moest de hele verzameling per administratief jaar kopiëren en bijwerken!',
+        'We hebben daar veel pijn kunnen wegnemen.', BR, BR,
+
+        'We hebben al stappen gezet om vanuit een spreadheet-verzameling een applicatie te kunnen genereren die ongeveer hetzelfde doet, maar met een database werkt.',
+        'Hier worden dus rekenmodellen en grafieken uit Excel vertaald naar rekenmodellen en grafieken in een (web)applicatie.',
+        'Het resultaat kun', VP,
+        'dan bijvoorbeeld aan', PN[g], 'klanten ter beschikking stellen.',
+        'Onze consultancy betreft dan bijvoorbeeld ook mogelijk rijkere visualisaties van informatie.'
+    }}
+    | { @: { # default
+        'Wij zijn op zoek naar mogelijke toepassingen van onze technologie om (grote) spreadsheetverzamelingen',
+        'doormiddel van een door onszelf ontwikkelde semantische scanner inzichtelijker te maken.',
+        'We zouden graag met iemand binnen', PN[g], 'organisatie spreken',
+        'die ervaring heeft met het analyzeren van spreadsheets van derden.'
+    }}
+
+  },
+  question = {_*?},
+  LONGBR,
+  final = {formal? "met vriendelijk groet," | "alvast bedankt,"},
+  addr = {
+      BR, BR, BR,
+      'Theo van den Heuvel'
+      'vdheuvel@untanglelogic.nl'
+      '0625492788'
+  }    
+}
