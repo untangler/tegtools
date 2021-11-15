@@ -45,15 +45,15 @@ sub produce(%parms) is export {
         'om te zien of wij uw dataverwerking kunnen stroomlijnen en robuuster maken?', BR,
         'Dat kan desgewenst remote, hoewel een bezoek aan', %parms<location>,  'onze voorkeur zou hebben.', BR, BR,
         PN, 'vindt meer informatie op onze splinternieuwe website: untanglelogic.nl.')
-      } elsif (%parms<long>) {
+      } elsif (%parms<visit>) {
         ('Op uw website zien we dat u zich o.a. bezighoudt met dataverzameling en -verwerking.',
         BR, BR,
         'Wij bieden consultancy aan op het gebied van dataverzameling en -verwerking.',
-        'We hebben ervaring op het gebied van complexe spreadsheet- en database-configuaties.',
+        'We hebben ervaring op het gebied van complexe spreadsheet- en database-configuraties.',
         'Sta', -> { %parms<formal> ?? ( XW, 'at u') !! 'je' }, 'open voor een vrijblijvend gesprek',
         'om te zien of wij uw dataverwerking kunnen stroomlijnen en robuuster maken?',
         'Dat kan desgewenst remote.',
-        PN, 'vindt meer informatie op onze splinternieuwe website: untanglelogic.nl.')
+        CAP, PN, 'vindt meer informatie op onze splinternieuwe website: untanglelogic.nl.')
       } elsif (%parms<long>) {
         ('Wij zetten op dit moment een consultancydienst op die organisaties helpt',
         'zich te bevrijden van diepe Excelvalkuilen.  Daarbij moet',  PN, 

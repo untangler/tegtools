@@ -56,13 +56,13 @@ TODO
 - parameterized directives (PN, V)
 - check consistency
 - expert tool to create letter form
-- teg compiler 
+- teg compiler
 
 ## 20211114
 
 teg syntax:
 
-- # comment
+- comment
 - named block: ... = {  ... }
 - alt:  |
 - terms: ,
@@ -81,13 +81,14 @@ so we can see e.g. the english materials in isolation or the informal ones.
 interactive tool to create a letterTeg.raku file
 Once compile template into rakumod.
 
-set up grammar for teg 
+set up grammar for teg
 also for vs code
 actions to produce rakumod
 set of smell example tegs
-
 
 in grammar:
 
 - add comments
 - add control structures
+
+## 20211115

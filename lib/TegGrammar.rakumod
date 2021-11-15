@@ -19,4 +19,11 @@ grammar TegGrammar is export {
         '"' $<content>=<-[ " ]> * '"' 
     || "'" $<content>=<-[ ' ]> * "'" 
   }
+
+  regex ws {
+    <!ww> [
+      | \s* '#' .* $
+      | \s* '/*' \s* .*? \s* '*/' \s*
+    ]
+  }
 }
